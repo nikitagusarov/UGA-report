@@ -1,0 +1,589 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+$if(colorlinks)$
+  \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+$endif$
+$if(CJKmainfont)$
+  \PassOptionsToPackage{space}{xeCJK}
+$endif$
+
+% Document descriptors
+\documentclass[
+$if(fontsize)$
+  $fontsize$,
+$else$
+  12pt
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+
+% Math symbols
+\usepackage{amsmath,amssymb}
+
+% Fonts
+$if(fontfamily)$
+  \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+$else$
+  \usepackage{lmodern}
+$endif$
+
+% Linestretch
+$if(linestretch)$
+  \usepackage{setspace}
+$endif$
+
+% Encoding
+% If PDF TeX
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
+  \usepackage[$if(inputenc)$$inputenc$$else$utf8$endif$]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else 
+% If luatex or xetex
+$if(mathspec)$
+  % If xetex
+  \ifXeTeX
+    \usepackage{mathspec}
+  \else
+    \usepackage{unicode-math}
+  \fi
+$else$
+  \usepackage{unicode-math}
+$endif$
+% Font features
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+$if(mainfont)$
+  \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
+$endif$
+$if(sansfont)$
+  \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
+$endif$
+$if(monofont)$
+  \setmonofont[$for(monofontoptions)$$monofontoptions$$sep$,$endfor$]{$monofont$}
+$endif$
+$for(fontfamilies)$
+  \newfontfamily{$fontfamilies.name$}[$for(fontfamilies.options)$$fontfamilies.options$$sep$,$endfor$]{$fontfamilies.font$}
+$endfor$
+$if(mathfont)$
+$if(mathspec)$
+  \ifXeTeX
+    \setmathfont(Digits,Latin,Greek)[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \else
+    \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \fi
+$else$
+  \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+$endif$
+$endif$
+$if(CJKmainfont)$
+  \ifXeTeX
+    \usepackage{xeCJK}
+    \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+  \fi
+$endif$
+$if(luatexjapresetoptions)$
+  \ifLuaTeX
+    \usepackage[$for(luatexjapresetoptions)$$luatexjapresetoptions$$sep$,$endfor$]{luatexja-preset}
+  \fi
+$endif$
+$if(CJKmainfont)$
+  \ifLuaTeX
+    \usepackage[$for(luatexjafontspecoptions)$$luatexjafontspecoptions$$sep$,$endfor$]{luatexja-fontspec}
+    \setmainjfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+  \fi
+$endif$
+\fi
+$if(zero-width-non-joiner)$
+%% Support for zero-width non-joiner characters.
+\makeatletter
+\def\zerowidthnonjoiner{%
+  % Prevent ligatures and adjust kerning, but still support hyphenating.
+  \texorpdfstring{%
+    \textormath{\nobreak\discretionary{-}{}{\kern.03em}%
+      \ifvmode\else\nobreak\hskip\z@skip\fi}{}%
+  }{}%
+}
+\makeatother
+\ifPDFTeX
+  \DeclareUnicodeCharacter{200C}{\zerowidthnonjoiner}
+\else
+  \catcode`^^^^200c=\active
+  \protected\def ^^^^200c{\zerowidthnonjoiner}
+\fi
+%% End of ZWNJ support
+$endif$
+
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+
+% Indent ?
+$if(indent)$
+$else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+$endif$
+
+% Verbatim code
+$if(verbatim-in-note)$
+  \usepackage{fancyvrb}
+$endif$
+\usepackage{xcolor}
+
+% Geometry
+$if(geometry)$
+  \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$else$
+  \usepackage[top=2.5cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+$endif$
+
+% Listings
+$if(listings)$
+  \usepackage{listings}
+  \newcommand{\passthrough}[1]{#1}
+  \lstset{defaultdialect=[5.3]Lua}
+  \lstset{defaultdialect=[x86masm]Assembler}
+$endif$
+
+% LHS
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+
+% Macros
+$if(highlighting-macros)$
+  $highlighting-macros$
+$endif$
+
+% Tables
+$if(tables)$
+  \usepackage{longtable,booktabs,array}
+  $if(multirow)$
+    \usepackage{multirow}
+  $endif$
+  \usepackage{calc} % for calculating minipage widths
+  % Correct order of tables after \paragraph or \subparagraph
+  \usepackage{etoolbox}
+  \makeatletter
+  \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+  \makeatother
+  % Allow footnotes in longtable head/foot
+  \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+  % \makesavenoteenv{longtable}
+$endif$
+
+% Graphics
+$if(graphics)$
+  \usepackage{graphicx}
+  \makeatletter
+  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+  \makeatother
+  % Scale images if necessary, so that they will not overflow the page
+  % margins by default, and it is still possible to overwrite the defaults
+  % using explicit options in \includegraphics[width, height, ...]{}
+  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+  % Set default figure placement to htbp
+  \makeatletter
+  \def\fps@figure{htbp}
+  \makeatother
+$endif$
+
+% Make links footnotes instead of hotlinks:
+$if(links-as-notes)$
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+
+% Other options
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Section numbering
+$if(numbersections)$
+  \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+
+% Block headings
+$if(block-headings)$
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+$endif$
+
+% Pagestyle
+$if(pagestyle)$
+\pagestyle{$pagestyle$}
+$endif$
+
+% CSL references
+$if(csl-refs)$
+  \newlength{\cslhangindent}
+  \setlength{\cslhangindent}{1.5em}
+  \newlength{\csllabelwidth}
+  \setlength{\csllabelwidth}{3em}
+  \newlength{\cslentryspacingunit} % times entry-spacing
+  \setlength{\cslentryspacingunit}{\parskip}
+  \newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+  {% don't indent paragraphs
+    \setlength{\parindent}{0pt}
+    % turn on hanging indent if param 1 is 1
+    \ifodd #1
+    \let\oldpar\par
+    \def\par{\hangindent=\cslhangindent\oldpar}
+    \fi
+    % set entry spacing
+    \setlength{\parskip}{#2\cslentryspacingunit}
+  }%
+  {}
+  \usepackage{calc}
+  \newcommand{\CSLBlock}[1]{#1\hfill\break}
+  \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+  \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+  \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
+
+% Language options
+$if(lang)$
+  \ifLuaTeX
+  \usepackage[bidi=basic]{babel}
+  \else
+  \usepackage[bidi=default]{babel}
+  \fi
+  $if(babel-lang)$
+    \babelprovide[main,import]{$babel-lang$}
+  $endif$
+  $for(babel-otherlangs)$
+    \babelprovide[import]{$babel-otherlangs$}
+  $endfor$
+  % get rid of language-specific shorthands (see #6817):
+  \let\LanguageShortHands\languageshorthands
+  \def\languageshorthands#1{}
+$endif$
+
+% Include in header
+$for(header-includes)$
+  $header-includes$
+$endfor$
+
+% Fixes for lua
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+% Direction shift
+$if(dir)$
+\ifPDFTeX
+  \TeXXeTstate=1
+  \newcommand{\RL}[1]{\beginR #1\endR}
+  \newcommand{\LR}[1]{\beginL #1\endL}
+  \newenvironment{RTL}{\beginR}{\endR}
+  \newenvironment{LTR}{\beginL}{\endL}
+\fi
+$endif$
+
+% Natbib options
+$if(natbib)$
+  \usepackage[$natbiboptions$]{natbib}
+  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+% Biblatex options
+$if(biblatex)$
+  \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+  $for(bibliography)$
+    \addbibresource{$bibliography$}
+  $endfor$
+$endif$
+
+% Nocite (exclude from citing)
+$if(nocite-ids)$
+  \nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+
+% CSquotes
+$if(csquotes)$
+  \usepackage{csquotes}
+$endif$
+
+% Styles
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+$if(verbatim-in-note)$
+  \VerbatimFootnotes % allow verbatim text in footnotes
+$endif$
+
+% Hypersetup
+\hypersetup{
+$if(title-meta)$
+  pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+  pdfauthor={$author-meta$},
+$endif$
+$if(lang)$
+  pdflang={$lang$},
+$endif$
+$if(subject)$
+  pdfsubject={$subject$},
+$endif$
+$if(keywords)$
+  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+$endif$
+$if(colorlinks)$
+  colorlinks=true,
+  linkcolor={$if(linkcolor)$$linkcolor$$else$Maroon$endif$},
+  filecolor={$if(filecolor)$$filecolor$$else$Maroon$endif$},
+  citecolor={$if(citecolor)$$citecolor$$else$Blue$endif$},
+  urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
+$else$
+  hidelinks,
+$endif$
+  pdfcreator={LaTeX via pandoc}}
+
+% Title setup
+$if(title)$
+  \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+
+$if(subtitle)$
+  \def\subtitle{$subtitle$}
+$endif$
+
+$if(author)$
+\def\author{$for(author)$$author$$sep$ \par $endfor$}
+$endif$
+
+$if(institute)$
+  \def\institute{$for(institute)$$institute$$sep$ \par $endfor$}
+$else$
+  \def\institute{
+    University Grenoble Alpes
+  }
+$endif$
+
+$if(supervision)$
+  \def\supervision{$for(supervision)$$supervision$$sep$ \par $endfor$}
+$endif$
+
+$if(date)$
+  \date{$date$}
+$endif$
+
+$if(draft)$
+  \usepackage{draftwatermark}
+  \SetWatermarkText{DRAFT}
+  \SetWatermarkLightness{0.9}
+  % \SetWatermarkScale{6}
+$endif$
+
+% Website hyperlinks for different elements
+\def\uga{https://www.univ-grenoble-alpes.fr/}
+\def\ginp{https://www.grenoble-inp.fr/}
+\def\feg{https://economie.univ-grenoble-alpes.fr/}
+\def\gael{https://gael.univ-grenoble-alpes.fr/}
+\def\gscop{https://g-scop.grenoble-inp.fr/}
+\def\cnrs{https://www.cnrs.fr/}
+\def\inrae{https://www.inrae.fr/}
+
+% Red and grey colors of the UGA logo (blue and orange in fact)
+% \definecolor{ugablue}{HTML}{264062}
+% \definecolor{ugared}{HTML}{E96112}
+\definecolor{ugablue}{HTML}{152d44}
+\definecolor{ugared}{HTML}{f75816}
+\definecolor{ugagrey}{HTML}{84949c}
+\definecolor{ugaorange}{HTML}{f79216}
+\definecolor{ugayellow}{HTML}{F7C816}
+\definecolor{ugagreen}{HTML}{4a9e20}
+\definecolor{ugapurple}{HTML}{9e2089}
+
+% Some tests and other color suggestions
+% # Blue
+% "#152d44",
+% "#442C15", # Complementary
+% "#151544", "#154444", # Analogous
+% # Orange
+% "#f75816",
+% "#16B5F7", # Complementary
+% "#F7C816", "#F71644", # Analogous
+% # Other 1
+% "#9e2089", # Analogous
+% "#899e20", # Triadic
+% # Grey
+% "#84949c",
+% # Other 2
+% "#9e2089", "#415c70", # Analogous
+% "#442615", "#16d2f7", "#9c8c84", # Complementary
+% # Yellow
+% "#cfb418",
+% # Other 3
+% "#4a9e20", "#f79216", # Analogous
+% "#442615", "#16d2f7", "#9916f7", # Complementary
+% # White
+% "#ffffff",
+% # Other (no generator)
+% "#a13163"
+
+% Make title page
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+  %\vspace{0.5cm}%
+  $if(graphics)$
+    $if(logos)$
+      \vspace{3mm}%
+      $for(logos)$
+        \href{\$it$}{\includegraphics[height=15mm]{./logos/logo-$it$.png}}\hspace{3mm}%
+      $endfor$
+      \par%
+    $endif$
+  $endif$
+  \vfill
+  % Title part
+  \centering
+  $if(title)$
+  \rule{\textwidth}{1.6pt}\vspace*{1pt} % Thick horizontal rule
+  \vspace{0.2cm} % Whitespace above the title
+    {\Huge \@title\\} % Title
+  \vspace{0cm} % Whitespace below the title
+  \rule{\textwidth}{1.6pt} % Thick horizontal rule
+  $endif$
+  % Subtitle
+  $if(subtitle)$
+  \vspace{2cm} % Whitespace after the title block
+    {\LARGE \subtitle\\} % Subtitle or further description
+  \vspace{1cm} % Whitespace under the subtitle
+  $endif$
+  % Authors
+  $if(author)$
+  \vspace{0.5\baselineskip} % Whitespace before the editors
+    {\scshape\Large \author\\} % Editor list
+  \vspace{0.5\baselineskip} % Whitespace below the editor list
+  $endif$
+  $if(supervision)$
+  \vspace{0.8cm} % Whitespace before the editors
+    {\large Under supervision of\\}
+    \vspace{0.2cm}
+    {\scshape\large \par\supervision\\} % Editor list
+  \vspace{0.5cm} % Whitespace below the editor list
+  $endif$
+  \vfill % Whitespace between
+  $if(institute)$
+  \textit{\large \institute\\} % Editor affiliation
+  $endif$
+  % Date
+  $if(date)$
+  \vspace{1.5cm} % Whitespace
+  {\large \@date}
+  $endif$
+  \end{titlepage}
+}
+\makeatother
+
+% Begin main part
+\begin{document}
+
+% Frontmatter
+$if(has-frontmatter)$
+  \frontmatter
+$endif$
+
+% Maketitle
+$if(title)$
+  \maketitle
+$endif$
+
+% Abstract
+$if(abstract)$
+  \begin{abstract}
+    $abstract$
+  \end{abstract}
+$endif$
+
+% Include before body
+$for(include-before)$
+  $include-before$
+$endfor$
+
+% TOC
+$if(toc)$
+  $if(toc-title)$
+    \renewcommand*\contentsname{$toc-title$}
+  $endif$
+  {
+  $if(colorlinks)$
+    \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+  $endif$
+  \setcounter{tocdepth}{$toc-depth$}
+  \tableofcontents
+  }
+$endif$
+
+$if(linestretch)$
+  \setstretch{$linestretch$}
+$endif$
+
+$if(has-frontmatter)$
+  \mainmatter
+$endif$
+
+% Body
+$body$
+
+% Backmatter
+$if(has-frontmatter)$
+  \backmatter
+$endif$
+
+% Natbib bibliography
+$if(natbib)$
+  $if(bibliography)$
+    $if(biblio-title)$
+      $if(has-chapters)$
+        \renewcommand\bibname{$biblio-title$}
+      $else$
+        \renewcommand\refname{$biblio-title$}
+      $endif$
+    $endif$
+    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+  $endif$
+$endif$
+
+% Biblatex
+$if(biblatex)$
+  \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
+
+% Include after
+$for(include-after)$
+  $include-after$
+$endfor$
+
+\end{document}
+% End of the document
