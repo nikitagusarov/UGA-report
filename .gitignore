@@ -370,5 +370,8 @@ tests
 .quarto/
 .quarto/*
 
+# Add example
+!example.pdf
+
 # Quarto automated .gitignore entry
 /.quarto/
